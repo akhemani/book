@@ -5,7 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.assignment.book.model.Book;
 
 public class BookSpecification {
-	public static Specification<Book> searchbookloyee(String searchText) {
+	public static Specification<Book> searchBook(String searchText) {
 		return (root, query, criteriaBuilder) -> {			
 			String toSearchText = "%" + searchText + "%";
 			return criteriaBuilder.and(criteriaBuilder.or(						
@@ -16,7 +16,7 @@ public class BookSpecification {
 		};
 	}
 	
-	public static Specification<Book> filterbookloyee(Book book) {
+	public static Specification<Book> filterBook(Book book) {
 		return (root, query, criteriaBuilder) -> {
 			
 			Predicate p1 = criteriaBuilder.and();
@@ -32,12 +32,14 @@ public class BookSpecification {
 				p2 = criteriaBuilder.equal(root.get("author"), book.getAuthor());
 			}
 			
-			if (book.getPrice() > -1) {
-				p1 = criteriaBuilder.equal(root.get("price"), book.getPrice());
+			if (book.getPrice() != null) {
+				if (book.getPrice() > -1) {
+					p3 = criteriaBuilder.equal(root.get("price"), book.getPrice());
+				}
 			}
 			
 			if (book.getIsbn() != null) {
-				p2 = criteriaBuilder.equal(root.get("isbn"), book.getIsbn());
+				p4 = criteriaBuilder.equal(root.get("isbn"), book.getIsbn());
 			}
 			
 			return criteriaBuilder.and(p1, p2, p3, p4);

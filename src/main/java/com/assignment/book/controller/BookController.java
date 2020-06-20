@@ -18,6 +18,7 @@ import com.assignment.book.common.ResultCode;
 import com.assignment.book.exception.BookNotFoundException;
 import com.assignment.book.model.Book;
 import com.assignment.book.service.BookService;
+import com.assignment.book.specification.BookSpecification;
 
 @RestController
 @RequestMapping(value = "/book")
@@ -59,6 +60,16 @@ public class BookController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Response> deleteBookById(@PathVariable Long id) {
 		return new ResponseEntity<>(new Response(ResultCode.SUCCESS, bookService.deleteById(id), Message.DELETED), HttpStatus.OK);
+	}
+	
+	@GetMapping("/filterBook")
+	public ResponseEntity<Response> filterBooks(@RequestBody Book book) {
+		return new ResponseEntity<>(new Response(ResultCode.SUCCESS, bookService.findAll(BookSpecification.filterBook(book)), Message.SUCCESS), HttpStatus.OK);
+	}
+	
+	@GetMapping("/searchBy/{searchedText}")
+	public ResponseEntity<Response> searchBook(@PathVariable String searchedText) {
+		return new ResponseEntity<>(new Response(ResultCode.SUCCESS, bookService.findAll(BookSpecification.searchBook(searchedText)), Message.SUCCESS), HttpStatus.OK);
 	}
 
 }
